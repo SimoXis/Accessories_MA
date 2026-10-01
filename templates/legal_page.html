@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block head_title %}{{ page.title }} | {{ store_settings.store_name }}{% endblock %}
+{% block content %}
+<section class="section-shell">
+  <article class="container legal-page">
+    <span class="eyebrow">{{ store_settings.store_name }}</span>
+    <h1>{{ page.title }}</h1>
+    <div class="legal-page__content">{{ page.content|linebreaksbr }}</div>
+  </article>
+</section>
+<style>
+  .legal-page { max-width:860px; }
+  .legal-page h1 { font-size:clamp(2.5rem,5vw,4rem); margin-bottom:28px; }
+  .legal-page__content { color:var(--store-muted); line-height:1.9; overflow-wrap:anywhere; }
+</style>
+{% endblock %}

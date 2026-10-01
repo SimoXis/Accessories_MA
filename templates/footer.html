@@ -1,0 +1,83 @@
+<footer class="store-footer">
+  <div class="container">
+    <div class="row align-items-start">
+      <div class="col-lg-4 col-md-6 mb-4">
+        <a class="store-footer__brand" href="{% url 'core:home' %}">{{ store_settings.store_name }}</a>
+        <p>Une sélection d’accessoires pour accompagner votre style au quotidien.</p>
+      </div>
+      <div class="col-lg-2 col-md-6 mb-4">
+        <h5>Navigation</h5>
+        <ul>
+          <li><a href="{% url 'core:home' %}">Accueil</a></li>
+          <li><a href="{% url 'core:shop' %}">Catalogue</a></li>
+          <li><a href="{% url 'core:contact' %}">Contact</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-4">
+        <h5>Informations</h5>
+        <ul>
+          <li><a href="{% url 'core:legal' 'privacy' %}">Confidentialité</a></li>
+          <li><a href="{% url 'core:legal' 'refund' %}">Remboursement</a></li>
+          <li><a href="{% url 'core:legal' 'terms' %}">Conditions d’utilisation</a></li>
+          <li><a href="{% url 'core:legal' 'delivery' %}">Livraison</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-4">
+</footer>
+
+<style>
+  .store-footer {
+    background: #171515;
+    color: rgba(255,255,255,0.78);
+    padding: 72px 0 28px;
+    margin-top: 40px;
+  }
+
+  .store-footer__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .store-footer h5 {
+    color: #fff;
+    margin-bottom: 18px;
+    font-size: 1.5rem;
+  }
+
+  .store-footer p,
+  .store-footer li,
+  .store-footer a {
+    color: rgba(255,255,255,0.75);
+    font-size: 0.96rem;
+    line-height: 1.9;
+  }
+
+  .store-footer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .store-footer a:hover { color: #fff; }
+
+  .store-footer__bottom {
+    margin-top: 32px;
+    padding-top: 22px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    flex-wrap: wrap;
+    color: rgba(255,255,255,0.6);
+    font-size: 0.9rem;
+  }
+
+  .store-footer__bottom a {
+    margin-left: 18px;
+  }
+</style>
+

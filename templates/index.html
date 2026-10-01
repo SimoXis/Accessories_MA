@@ -1,0 +1,245 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <div class="hero__card">
+      <div class="hero__content">
+        <span class="eyebrow">Accessoires · Maroc</span>
+        <h1>Le détail qui affirme votre style.</h1>
+        <div class="hero__actions">
+          <a href="{% url 'core:shop' %}" class="btn btn-primary">Découvrir le catalogue</a>
+          <a href="{% url 'core:contact' %}" class="btn btn-outline-dark">Nous contacter</a>
+        </div>
+        <div class="hero__stats">
+          <div class="hero__stat">
+            <strong>Simple</strong>
+            <span>Commande sans compte</span>
+          </div>
+          <div class="hero__stat">
+            <strong>COD</strong>
+            <span>Paiement à la livraison</span>
+          </div>
+          <div class="hero__stat">
+            <strong>Maroc</strong>
+            <span>Livraison locale</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero__visual" aria-label="Parfum premium"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-shell">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="eyebrow">Collections</span>
+        <h2>Trouvez votre essentiel</h2>
+      </div>
+      <a href="{% url 'core:shop' %}" class="btn btn-primary">Voir le catalogue</a>
+    </div>
+    <div class="product-grid">
+      {% for category in categories %}
+        <a href="/category/{{ category.slug }}/" class="product-card">
+          <div class="product-card__media">
+            {% if category.image %}
+              <img src="{{ category.image.url }}" alt="{{ category.title }}">
+            {% else %}
+              <div class="category-placeholder" aria-hidden="true">{{ category.title|first }}</div>
+            {% endif %}
+          </div>
+          <div class="product-card__body">
+            <div class="product-card__meta">
+                <span>Collection</span>
+                <span>{{ category.title }}</span>
+            </div>
+            <h3 class="product-card__title">{{ category.title }}</h3>
+            <div class="product-card__desc">{{ category.description|truncatechars:80 }}</div>
+          </div>
+        </a>
+      {% empty %}
+        <p>Aucune collection disponible pour le moment.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section-shell" style="background: rgba(255,255,255,0.35);">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="eyebrow">Produits populaires</span>
+        <h2>Nos produits populaires</h2>
+      </div>
+      <a href="/shop/" class="btn btn-outline-dark">Explorer</a>
+    </div>
+    <div class="product-grid">
+      {% for item in featured_items %}
+        {% include 'product_card.html' with item=item %}
+      {% empty %}
+        <p>Les nouveautés seront affichées ici dès leur disponibilité.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<!-- Section "Nouveautés"
+<section class="section-shell">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="eyebrow">Nouveautés</span>
+        <h2>La dernière sélection</h2>
+      </div>
+    </div>
+    <div class="product-grid">
+      {% for item in new_items %}
+        {% include 'product_card.html' with item=item %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+-->
+<section class="section-shell" style="background: rgba(201,166,107,0.08);">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="eyebrow">Promotions</span>
+        <h2>Offres du moment</h2>
+      </div>
+    </div>
+    <div class="product-grid">
+      {% for item in promo_items %}
+        {% include 'product_card.html' with item=item %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<!-- Section "Pourquoi nous" 
+<section class="section-shell">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="eyebrow">Pourquoi nous</span>
+        <h2>Une expérience shopping premium</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 col-lg-3 mb-4">
+        <div class="product-card__body" style="background: rgba(255,255,255,0.4); border-radius: 22px; border: 1px solid rgba(29,29,31,0.05);">
+          <h3 class="product-card__title" style="font-size: 1.8rem;">Livraison</h3>
+          <p class="product-card__desc">Les frais sont affichés avant la confirmation de votre commande.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3 mb-4">
+        <div class="product-card__body" style="background: rgba(255,255,255,0.4); border-radius: 22px; border: 1px solid rgba(29,29,31,0.05);">
+          <h3 class="product-card__title" style="font-size: 1.8rem;">Paiement à la livraison</h3>
+          <p class="product-card__desc">Commande simple, sécurisée et sans friction.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3 mb-4">
+        <div class="product-card__body" style="background: rgba(255,255,255,0.4); border-radius: 22px; border: 1px solid rgba(29,29,31,0.05);">
+          <h3 class="product-card__title" style="font-size: 1.8rem;">Sélection soignée</h3>
+          <p class="product-card__desc">Des accessoires choisis pour compléter votre style.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3 mb-4">
+        <div class="product-card__body" style="background: rgba(255,255,255,0.4); border-radius: 22px; border: 1px solid rgba(29,29,31,0.05);">
+          <h3 class="product-card__title" style="font-size: 1.8rem;">Service client</h3>
+          <p class="product-card__desc">Conseils personnalisés et suivi en amont comme en aval.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-shell" style="padding-top: 0;">
+  <div class="container">
+    <div style="border-radius: 26px; background: linear-gradient(135deg,#171515 0%, #2a221f 100%); padding: 50px 32px; color:#fff; display:flex; justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap;">
+      <div>
+        <span class="eyebrow" style="color:#d8bd8d;">ACCESORIES MA</span>
+        <h2 style="color:#fff; font-size: clamp(2.2rem, 3vw, 3.3rem);">Trouvez le détail qui vous ressemble.</h2>
+      </div>
+      <a href="/shop/" class="btn btn-primary" style="background:#fff; color:#171515; border-color:#fff;">Découvrir la collection</a>
+    </div>
+  </div>
+</section>
+-->
+<div class="social-icons">
+
+    {% if store_settings.instagram_url %}
+    <a href="{{ store_settings.instagram_url }}"
+       target="_blank"
+       rel="noopener"
+       aria-label="Instagram"
+       title="Instagram">
+      <i class="fab fa-instagram"></i>
+    </a>
+    {% endif %}
+
+    {% if store_settings.whatsapp_number %}
+    <a href="https://wa.me/{{ store_settings.whatsapp_number|cut:'+'|cut:' '|cut:'-' }}?text=Bonjour%2C%20je%20souhaite%20obtenir%20des%20informations."
+       target="_blank"
+       rel="noopener"
+       aria-label="WhatsApp"
+       title="WhatsApp">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+    {% endif %}
+
+    {% if store_settings.tiktok_url %}
+    <a href="{{ store_settings.tiktok_url }}"
+       target="_blank"
+       rel="noopener"
+       aria-label="TikTok"
+       title="TikTok">
+      <i class="fab fa-tiktok"></i>
+    </a>
+    {% endif %}
+
+  </div>
+<style>
+.social-icons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    align-items: center;
+    margin: 45px 0;
+}
+
+.social-icons a {
+    width: 50px;
+    height: 50px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #171515 !important;
+    background: #ffffff;
+    border: 1px solid #d8d6cf;
+    border-radius: 50%;
+
+    font-size: 21px !important;
+    text-decoration: none !important;
+
+    transition: all 0.25s ease;
+}
+
+.social-icons a i {
+    color: #171515 !important;
+    transition: color 0.25s ease;
+}
+
+.social-icons a:hover {
+    background: #171515 !important;
+    border-color: #171515 !important;
+    transform: translateY(-4px);
+}
+
+.social-icons a:hover i {
+    color: #ffffff !important;
+}
+</style>
+{% endblock %}
+								

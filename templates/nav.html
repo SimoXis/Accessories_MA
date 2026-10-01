@@ -1,0 +1,220 @@
+{% load static %}
+<div class="announcement-bar">
+  <div class="announcement-track">
+    <div class="announcement-group">
+      <span>{{ store_settings.announcement_text }}</span>
+      <span>✦</span>
+      <span>{{ store_settings.announcement_text }}</span>
+      <span>✦</span>
+      <span>{{ store_settings.announcement_text }}</span>
+      <span>✦</span>
+    </div>
+
+    <div class="announcement-group" aria-hidden="true">
+      <span>{{ store_settings.announcement_text }}</span>
+      <span>✦</span>
+      <span>{{ store_settings.announcement_text }}</span>
+      <span>✦</span>
+      <span>{{ store_settings.announcement_text }}</span>
+      <span>✦</span>
+    </div>
+  </div>
+</div>
+
+
+<header class="store-navbar">
+  <div class="container store-navbar__inner">
+    <div class="header-main">
+      <div class="header-left">
+        <form class="store-search header-search" action="{% url 'core:shop' %}" method="get">
+          <i class="fa fa-search" aria-hidden="true"></i>
+          <input type="search" name="q" placeholder="Rechercher" aria-label="Rechercher un produit" value="{{ request.GET.q|default:'' }}">
+        </form>
+        <button class="store-menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="store-navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+      <a href="{% url 'core:home' %}" class="store-brand header-logo" aria-label="Accueil">
+        <img src="{% static 'images/logo2.png' %}" alt="Logo" class="store-brand__logo">
+      </a>
+
+      <div class="header-right">
+        <a href="{% url 'core:order-summary' %}" class="store-cart" aria-label="Panier, {{ cart_count }} article(s)">
+          <i class="fa fa-shopping-bag" aria-hidden="true"></i><span>{{ cart_count }}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <nav class="desktop-nav" aria-label="Navigation principale desktop">
+    <div class="container desktop-nav__inner">
+      <a href="{% url 'core:home' %}">Accueil</a>
+      <a href="{% url 'core:shop' %}">Catalogue</a>
+      <a href="{% url 'core:contact' %}">Contact</a>
+    </div>
+  </nav>
+
+  <nav class="mobile-nav" id="store-navigation" aria-label="Navigation mobile">
+    <div class="mobile-nav__inner">
+      <form class="store-search store-search--mobile" action="{% url 'core:shop' %}" method="get">
+        <i class="fa fa-search" aria-hidden="true"></i>
+        <input type="search" name="q" placeholder="Rechercher" aria-label="Rechercher un produit" value="{{ request.GET.q|default:'' }}">
+      </form>
+      <a href="{% url 'core:home' %}">Accueil</a>
+      <a href="{% url 'core:shop' %}">Catalogue</a>
+      <a href="{% url 'core:contact' %}">Contact</a>
+    </div>
+  </nav>
+</header>
+<style>
+  .announcement-bar {
+  width: 100%;
+  height: 36px;
+  overflow: hidden;
+  background: #202820;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  position: relative;
+}
+
+.announcement-track {
+  display: flex;
+  width: max-content;
+  animation: announcement-scroll 18s linear infinite;
+}
+
+.announcement-group {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.announcement-group span {
+  flex-shrink: 0;
+  padding: 0 28px;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+@keyframes announcement-scroll {
+  from {
+    transform: translateX(-50%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+  .store-navbar { position:sticky; top:0; z-index:50; background:rgba(250,249,246,.96); border-bottom:1px solid #e8e6df; }
+  .store-navbar__inner { position:relative; }
+  .header-main {
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
+    align-items:center;
+    min-height:84px;
+    gap:18px;
+  }
+.store-brand__logo {
+    width: 220px;
+    height: 75px;
+    object-fit: contain;
+    display: block;
+}
+@media (max-width: 768px) {
+    .store-brand__logo {
+        width: 150px;
+        height: 60px;
+        object-fit: contain;
+        display: block;
+    }
+}
+  .header-left,
+  .header-right { display:flex; align-items:center; }
+  .header-left { justify-self:start; }
+  .header-right { justify-self:end; }
+  .header-logo { justify-self:center; }
+  .store-brand { display:inline-flex; align-items:center; justify-content:center; gap:10px; min-width:0; color:#202820; font-size:.92rem; font-weight:800; white-space:nowrap; text-align:center; }
+  .store-brand__logo { width:38px; height:38px; object-fit:contain; }
+  .store-search { display:flex; align-items:center; gap:8px; min-width:180px; border:1px solid #deded6; border-radius:4px; padding:7px 10px; background:#fff; }
+  .store-search input { width:100%; min-width:0; border:0; background:transparent; outline:none; font-size:.9rem; }
+  .store-cart,
+  .store-menu-toggle { position:relative; display:inline-flex; align-items:center; justify-content:center; width:46px; height:46px; border:1px solid #deded6; border-radius:4px; background:#fff; color:#202820; }
+  .store-cart span { position:absolute; top:-5px; right:-5px; min-width:19px; height:19px; padding:0 4px; border-radius:50%; background:#a35f3b; color:#fff; font-size:.68rem; display:flex; align-items:center; justify-content:center; }
+  .store-menu-toggle { display:none; flex-direction:column; gap:5px; padding:10px; }
+  .store-menu-toggle span { width:20px; height:2px; background:#202820; }
+  .desktop-nav { border-top:1px solid #e8e6df; border-bottom:1px solid #e8e6df; background:rgba(255,255,255,.35); }
+  .desktop-nav__inner { min-height:52px; display:flex; align-items:center; justify-content:center; gap:40px; }
+  .desktop-nav a { min-height:44px; display:flex; align-items:center; color:#53594f; font-size:.9rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em; }
+  .desktop-nav a:hover { color:#a35f3b; }
+  .mobile-nav { display:none; }
+  @media (max-width: 768px) {
+    .announcement-group span {
+  padding: 0 18px;
+  font-size: .64rem;
+  letter-spacing: .06em;
+}
+    .header-main { min-height:72px; gap:10px; }
+    .header-search { display:none; }
+    .header-left { justify-self:start; }
+    .header-logo { justify-self:center; }
+    .store-brand { font-size:.78rem; gap:7px; }
+    .store-brand__logo { width:32px; height:32px; }
+    .store-menu-toggle { display:inline-flex; }
+    .desktop-nav { display:none; }
+    .mobile-nav {
+      display:none;
+      position:absolute;
+      left:0;
+      right:0;
+      top:100%;
+      z-index:60;
+      background:#faf9f6;
+      border-bottom:1px solid #e8e6df;
+      box-shadow:0 12px 18px rgba(32,40,32,.08);
+    }
+    .mobile-nav.is-open { display:block; }
+    .mobile-nav__inner { display:flex; flex-direction:column; align-items:stretch; width:min(100%, 100%); padding:12px 16px 16px; }
+    .store-search--mobile { display:flex; width:100%; margin-bottom:8px; }
+    .mobile-nav a {
+      min-height:48px;
+      display:flex;
+      align-items:center;
+      border-bottom:1px solid #eeece6;
+      color:#202820;
+      font-size:.9rem;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+    .mobile-nav a:last-child { border-bottom:none; }
+  }
+</style>
+<script>
+  (function () {
+    var toggle = document.querySelector('.store-menu-toggle');
+    var navigation = document.getElementById('store-navigation');
+    if (!toggle || !navigation) return;
+
+    function setMenuState(open) {
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      toggle.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+      navigation.classList.toggle('is-open', open);
+    }
+
+    toggle.addEventListener('click', function () {
+      setMenuState(toggle.getAttribute('aria-expanded') !== 'true');
+    });
+
+    navigation.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function () {
+        setMenuState(false);
+      });
+    });
+  }());
+</script>

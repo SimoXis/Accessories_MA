@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block head_title %}{% if active_category %}{{ active_category.title }}{% else %}Catalogue{% endif %} | {{ store_settings.store_name }}{% endblock %}
+{% block content %}
+<section class="section-shell">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="eyebrow">{{ store_settings.store_name }} · Maroc</span>
+        <h1>{% if active_category %}{{ active_category.title }}{% else %}Catalogue{% endif %}</h1>
+        {% if active_category and active_category.description %}<p class="product-card__desc">{{ active_category.description }}</p>{% endif %}
+      </div>
+      <span class="catalog-count">{{ page_obj.paginator.count|default:object_list|length }} article(s)</span>
+    </div>
+    <form class="catalog-filters" method="get" action="{% url 'core:shop' %}">
+      <label class="catalog-search"><span class="sr-only">Rechercher un produit</span><input type="search" name="q" value="{{ query }}" placeholder="Rechercher un accessoire"></label>
+      <label><span class="sr-only">Collection</span><select name="category" aria-label="Collection">
+        <option value="">Toutes les collections</option>
+        {% for category in categories %}<option value="{{ category.slug }}" {% if selected_category == category.slug %}selected{% endif %}>{{ category.title }}</option>{% endfor %}
+      </select></label>
+      <label><span class="sr-only">Trier les produits</span><select name="sort" aria-label="Trier les produits">
+        <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Plus récents</option>
+        <option value="price_asc" {% if sort == 'price_asc' %}selected{% endif %}>Prix croissant</option>
+        <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>Prix décroissant</option>
+      </select></label>
+      <button type="submit" class="btn btn-primary">Appliquer</button>
+    </form>
+    {% if object_list %}
+      <div class="product-grid">
+        {% for item in object_list %}{% include 'product_card.html' with item=item %}{% endfor %}
+      </div>
+      {% if is_paginated %}
+        <nav class="catalog-pagination" aria-label="Pagination">
+          {% if page_obj.has_previous %}<a href="?q={{ query|urlencode }}&category={{ selected_category|urlencode }}&sort={{ sort }}&page={{ page_obj.previous_page_number }}">Précédent</a>{% endif %}
+          <span>Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}</span>
+          {% if page_obj.has_next %}<a href="?q={{ query|urlencode }}&category={{ selected_category|urlencode }}&sort={{ sort }}&page={{ page_obj.next_page_number }}">Suivant</a>{% endif %}
+        </nav>
+      {% endif %}
+    {% else %}
+      <div class="empty-state"><h2>Aucun article trouvé</h2><p>Essayez une autre recherche ou parcourez toutes les collections.</p><a href="{% url 'core:shop' %}" class="btn btn-outline-dark">Voir tout le catalogue</a></div>
+    {% endif %}
+  </div>
+</section>
+<style>
+  .catalog-filters { display:grid; grid-template-columns:minmax(180px,1fr) minmax(170px,.7fr) minmax(160px,.6fr) auto; gap:10px; margin:24px 0 28px; }
+  .catalog-filters input,.catalog-filters select { width:100%; min-height:46px; padding:8px 12px; border:1px solid #cfd4c9; border-radius:4px; background:#fff; color:var(--store-ink); }
+  .catalog-count { color:var(--store-muted); font-size:.9rem; }
+  .product-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:18px; }
+  .product-card__media-wrap { position:relative; }
+  .product-card__badge { position:absolute; z-index:1; top:10px; left:10px; padding:5px 8px; background:#a35f3b; color:#fff; font-size:.68rem; font-weight:700; text-transform:uppercase; }
+  .product-card__badge--muted { background:#52594f; }
+  .product-card__actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:14px; }
+  .product-card__actions form { min-width:0; }
+  .product-card__actions button { width:100%; min-height:44px; padding:6px; border:1px solid var(--store-ink); border-radius:4px; background:var(--store-ink); color:#fff; font-size:.7rem; font-weight:700; }
+  .product-card__actions .product-card__buy { background:#fff; color:var(--store-ink); }
+  .product-card__actions button:disabled { background:#e5e8df; border-color:#e5e8df; color:#62695f; }
+  .catalog-pagination { display:flex; justify-content:center; align-items:center; gap:20px; padding:30px 0 0; }
+  .catalog-pagination a { min-height:44px; display:flex; align-items:center; color:var(--store-accent); }
+  @media(max-width:1000px) { .product-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+  @media(max-width:680px) { .catalog-filters { grid-template-columns:1fr 1fr; } .catalog-search { grid-column:1/-1; } .product-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; } }
+  @media(max-width:360px) { .product-card__body { padding:14px 11px; } .product-card__title { font-size:1.3rem; } .product-card__actions { grid-template-columns:1fr; } }
+</style>
+{% endblock %}

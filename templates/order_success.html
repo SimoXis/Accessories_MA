@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block head_title %}Commande confirmée | {{ store_settings.store_name }}{% endblock %}
+
+{% block content %}
+<section class="section-shell">
+  <div class="container" style="max-width:760px;">
+    <div class="checkout-card text-center">
+      <span class="eyebrow">{{ store_settings.store_name }}</span>
+      <h1 style="font-size:clamp(2.8rem,6vw,4.5rem); line-height:0.95; margin-bottom:18px;">Merci !</h1>
+      <p class="product-card__desc" style="margin:0 auto 24px; max-width:560px;">Votre commande a bien été reçue. Nous vous contacterons par téléphone pour confirmer votre commande.</p>
+      {% if ref_code %}
+        <p><strong>Numéro de commande :</strong> {{ ref_code }}</p>
+      {% endif %}
+      {% if customer.full_name %}
+        <p><strong>Livraison pour :</strong> {{ customer.full_name }}</p>
+      {% endif %}
+      {% if customer.phone_number %}
+        <p><strong>Téléphone :</strong> {{ customer.phone_number }}</p>
+      {% endif %}
+      {% if customer.city %}
+        <p><strong>Ville :</strong> {{ customer.city }}</p>
+      {% endif %}
+      {% if order.delivery_address %}<p><strong>Adresse :</strong> {{ order.delivery_address }}</p>{% endif %}
+      {% if order %}
+        <div class="confirmation-order">
+          <h2>Votre commande</h2>
+          <ul>
+            {% for order_item in order.items.all %}
+              <li><span>{{ order_item.title_snapshot|default:order_item.item.title|default:'Produit indisponible' }} × {{ order_item.quantity }}</span><strong>{{ order_item.get_final_price|floatformat:2 }} DH</strong></li>
+            {% endfor %}
+          </ul>
+          <div class="summary-row"><span>Sous-total</span><strong>{{ order.subtotal|floatformat:2 }} DH</strong></div>
+          <div class="summary-row"><span>Livraison</span><strong>{% if order.shipping_cost %}{{ order.shipping_cost|floatformat:2 }} DH{% else %}Offerte{% endif %}</strong></div>
+          <div class="summary-row summary-row--total"><span>Total à payer à la livraison</span><strong>{{ order.get_total|floatformat:2 }} DH</strong></div>
+        </div>
+      {% endif %}
+      <a href="{% url 'core:shop' %}" class="btn btn-primary" style="margin-top:18px;">Retour à la boutique</a>
+    </div>
+  </div>
+</section>
+<style>
+  .confirmation-order { max-width:560px; margin:28px auto 0; padding:20px; text-align:left; border:1px solid var(--store-line); border-radius:4px; }
+  .confirmation-order h2 { margin-bottom:14px; font:700 1rem 'Inter',sans-serif; }
+  .confirmation-order ul { margin:0 0 12px; padding:0; list-style:none; }
+  .confirmation-order li { display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-bottom:1px solid var(--store-line); }
+  .confirmation-order li span { overflow-wrap:anywhere; }
+</style>
+{% endblock content %}

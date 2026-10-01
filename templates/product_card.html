@@ -1,0 +1,22 @@
+<article class="product-card">
+  <div class="product-card__media product-card__media-wrap">
+    {% if not item.stock %}<span class="product-card__badge product-card__badge--muted">Épuisé</span>{% elif item.discount_price %}<span class="product-card__badge">Promo</span>{% endif %}
+    <a href="{{ item.get_absolute_url }}">
+      {% if item.image %}<img src="{{ item.image.url }}" alt="{{ item.title }}" loading="lazy">{% endif %}
+    </a>
+  </div>
+  <div class="product-card__body">
+    <div class="product-card__meta"><span>{{ item.category.title }}</span><span>Réf. {{ item.stock_no }}</span></div>
+    <a href="{{ item.get_absolute_url }}" class="product-card__title">{{ item.title }}</a>
+    <div class="product-card__prices">
+      {% if item.discount_price %}<span class="product-card__old-price">{{ item.price|floatformat:2 }} DH</span>{% endif %}
+      <span class="product-card__price">{% if item.discount_price %}{{ item.discount_price|floatformat:2 }}{% else %}{{ item.price|floatformat:2 }}{% endif %} DH</span>
+    </div>
+    <div class="product-card__actions">
+      {% if item.stock %}
+        <form method="post" action="{% url 'core:add-to-cart' item.slug %}">{% csrf_token %}<input type="hidden" name="quantity" value="1"><button type="submit" class="product-card__action">Ajouter</button></form>
+        <form method="post" action="{% url 'core:add-to-cart' item.slug %}">{% csrf_token %}<input type="hidden" name="quantity" value="1"><input type="hidden" name="next" value="checkout"><button type="submit" class="product-card__buy">Acheter</button></form>
+      {% else %}<button type="button" class="product-card__action" disabled>Épuisé</button>{% endif %}
+    </div>
+  </div>
+</article>

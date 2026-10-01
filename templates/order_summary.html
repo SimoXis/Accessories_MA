@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block head_title %}Panier | {{ store_settings.store_name }}{% endblock %}
+{% block content %}
+<section class="section-shell">
+  <div class="container">
+    <div class="section-header">
+      <div><span class="eyebrow">Votre sélection</span><h1>Panier</h1></div>
+      <a href="{% url 'core:shop' %}" class="btn btn-outline-dark">Continuer mes achats</a>
+    </div>
+    {% if cart_lines %}
+      <div class="cart-layout">
+        <div class="cart-lines">
+          {% for line in cart_lines %}
+            <article class="cart-line">
+              {% if line.item.image %}<img src="{{ line.item.image.url }}" alt="{{ line.item.title }}" loading="lazy">{% endif %}
+              <div class="cart-line__info">
+                <a href="{{ line.item.get_absolute_url }}" class="cart-line__title">{{ line.item.title }}</a>
+                <span>{{ line.unit_price|floatformat:2 }} DH / unité</span>
+                <div class="quantity-control" aria-label="Quantité">
+                  <form method="post" action="{% url 'core:remove-single-item-from-cart' line.item.slug %}">{% csrf_token %}<button type="submit" aria-label="Diminuer la quantité">−</button></form>
+                  <span>{{ line.quantity }}</span>
+                  <form method="post" action="{% url 'core:add-to-cart' line.item.slug %}">{% csrf_token %}<button type="submit" aria-label="Augmenter la quantité">+</button></form>
+                </div>
+              </div>
+              <strong class="cart-line__total">{{ line.line_total|floatformat:2 }} DH</strong>
+              <form class="cart-line__remove" method="post" action="{% url 'core:remove-from-cart' line.item.slug %}">{% csrf_token %}<button type="submit">Supprimer</button></form>
+            </article>
+          {% endfor %}
+        </div>
+        <aside class="cart-summary">
+          <h2>Récapitulatif</h2>
+          <div class="summary-row"><span>Sous-total</span><strong>{{ subtotal|floatformat:2 }} DH</strong></div>
+          <div class="summary-row"><span>Livraison</span><strong>{% if shipping %}{{ shipping|floatformat:2 }} DH{% else %}Offerte{% endif %}</strong></div>
+          <div class="summary-row summary-row--total"><span>Total estimé</span><strong>{{ total|floatformat:2 }} DH</strong></div>
+          <a href="{% url 'core:checkout' %}" class="btn btn-primary btn-block">Commander</a>
+          <p class="checkout-note">Paiement à la livraison. Aucun compte n’est nécessaire.</p>
+        </aside>
+      </div>
+    {% else %}
+      <div class="empty-state"><h2>Votre panier est vide</h2><p>Parcourez le catalogue pour trouver vos prochains accessoires.</p><a href="{% url 'core:shop' %}" class="btn btn-primary">Découvrir le catalogue</a></div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% block head_title %}Commande | {{ store_settings.store_name }}{% endblock %}
+{% block content %}
+<section class="section-shell">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="eyebrow">Commande sans création de compte</span>
+        <h1>Votre commande</h1>
+      </div>
+      <a href="{% url 'core:order-summary' %}" class="btn btn-outline-dark">Retour au panier</a>
+    </div>
+    {% if form.non_field_errors %}<div class="alert alert-danger" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+    <div class="row">
+      <div class="checkout-wrapper">
+
+  <div class="checkout-card">
+
+    <h2>Coordonnées de livraison</h2>
+
+    <form method="post" id="checkout-form" novalidate>
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="{{ form.full_name.id_for_label }}">Nom complet</label>
+        {{ form.full_name }}
+        {% if form.full_name.errors %}
+          <div class="field-error">{{ form.full_name.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.phone_number.id_for_label }}">Téléphone</label>
+        {{ form.phone_number }}
+        {% if form.phone_number.errors %}
+          <div class="field-error">{{ form.phone_number.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.city.id_for_label }}">Ville</label>
+        {{ form.city }}
+        {% if form.city.errors %}
+          <div class="field-error">{{ form.city.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group" id="other-city-field"
+           {% if form.city.value != 'other' and not form.other_city.errors %}hidden{% endif %}>
+        <label for="{{ form.other_city.id_for_label }}">Précisez votre ville</label>
+        {{ form.other_city }}
+        {% if form.other_city.errors %}
+          <div class="field-error">{{ form.other_city.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.street_address.id_for_label }}">Adresse de livraison</label>
+        {{ form.street_address }}
+        {% if form.street_address.errors %}
+          <div class="field-error">{{ form.street_address.errors }}</div>
+        {% endif %}
+      </div>
+
+      {{ form.submission_key }}
+      {{ form.website }}
+
+      <div class="cod-notice">
+        <strong>Paiement à la livraison</strong>
+        <span>Vous paierez votre commande lors de sa réception.</span>
+      </div>
+
+      <!-- RÉCAPITULATIF INTÉGRÉ DANS LA MÊME SECTION -->
+      <div class="checkout-summary-mobile">
+        {% include 'order_snippet.html' %}
+      </div>
+
+      <button class="btn btn-primary btn-block"
+              id="checkout-submit"
+              type="submit">
+        Finaliser la commande
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+    </div>
+  </div>
+</section>
+{% endblock content %}
+{% block extra_scripts %}
+<script>
+  (function () {
+    var city = document.getElementById('{{ form.city.id_for_label }}');
+    var otherCity = document.getElementById('other-city-field');
+    var checkoutForm = document.getElementById('checkout-form');
+    var submitButton = document.getElementById('checkout-submit');
+    if (city && otherCity) {
+      city.addEventListener('change', function () {
+        otherCity.hidden = city.value !== 'other';
+      });
+    }
+    if (checkoutForm && submitButton) {
+      checkoutForm.addEventListener('submit', function () {
+        if (!checkoutForm.checkValidity()) return;
+        submitButton.disabled = true;
+        submitButton.textContent = 'Enregistrement…';
+      });
+    }
+  }());
+</script>
+<style>
+.checkout-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.checkout-card {
+    background: #ffffff;
+    border: 1px solid #e5e2da;
+    border-radius: 10px;
+    padding: 30px;
+}
+
+.checkout-card h2 {
+    font-size: 1.6rem;
+    margin-bottom: 25px;
+}
+
+.checkout-summary-mobile {
+    margin-top: 28px;
+    padding-top: 25px;
+    border-top: 1px solid #e5e2da;
+}
+
+/* On évite une deuxième grosse carte à l'intérieur */
+.checkout-summary-mobile .checkout-card,
+.checkout-summary-mobile .order-snippet {
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+
+    .checkout-wrapper {
+        width: 100%;
+    }
+
+    .checkout-card {
+        padding: 20px 16px;
+        border-radius: 8px;
+    }
+
+    .checkout-card h2 {
+        font-size: 1.35rem;
+        margin-bottom: 22px;
+    }
+
+    .checkout-summary-mobile {
+        margin-top: 25px;
+        padding-top: 22px;
+    }
+
+}
+</style>
+{% endblock extra_scripts %}
