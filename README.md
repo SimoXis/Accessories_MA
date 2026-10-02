@@ -73,7 +73,7 @@ WhiteNoise sert les fichiers statiques en production. Les médias (`media_root/`
 ## Lancement local
 
 ```powershell
-$env:SECRET_KEY = 'dev-secret-key-change-me'
+$env:SECRET_KEY = 'your-secret-key-here'
 python manage.py runserver
 ```
 
