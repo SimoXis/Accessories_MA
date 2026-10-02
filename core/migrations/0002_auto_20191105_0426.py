@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='billingaddress',
             name='address_type',
-            field=models.CharField(choices=[('B', 'Billing'), ('S', 'Shipping')], default='exit', max_length=1),
+            field=models.CharField(choices=[('B', 'Billing'), ('S', 'Shipping')], default='8', max_length=1),
             preserve_default=False,
         ),
         migrations.AddField(
